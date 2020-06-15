@@ -1,0 +1,11 @@
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\bin\Debug\CollegeBreaker.exe.config
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\bin\Debug\CollegeBreaker.exe
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\bin\Debug\CollegeBreaker.pdb
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.Properties.Resources.resources
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.csproj.GenerateResource.cache
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.exe
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.pdb
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.Form1.resources
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.MainForm.resources
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.csprojAssemblyReference.cache
+C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.GameForm.resources
