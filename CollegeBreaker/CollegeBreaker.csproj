@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlHandler.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +146,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Exit_Clean.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6_Brick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7_Brick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8_Brick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9_Brick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\10_Brick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ball.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
