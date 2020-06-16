@@ -9,3 +9,15 @@ C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBrea
 C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.MainForm.resources
 C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.csprojAssemblyReference.cache
 C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.GameForm.resources
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\bin\Debug\CollegeBreaker.exe.config
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\bin\Debug\CollegeBreaker.exe
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\bin\Debug\CollegeBreaker.pdb
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.csprojAssemblyReference.cache
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.GameForm.resources
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.MainForm.resources
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.Properties.Resources.resources
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.csproj.GenerateResource.cache
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.csproj.CoreCompileInputs.cache
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.exe
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.pdb
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.PlayerName.resources
