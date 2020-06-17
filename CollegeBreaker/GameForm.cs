@@ -16,7 +16,7 @@ namespace CollegeBreaker
         public GameForm()
         {
             InitializeComponent();
-            game = new Game();
+            game = new Game(this.Width, this.Height);
             game.NextLevel();
             timer1.Start();
         }

@@ -11,26 +11,28 @@ namespace CollegeBreaker
 {
     class Game
     {
+        public Ball Ball;
+
+        private int width;
+        private int height;
+
+
+
         public int Level { get; set; }
         public int[] LevelPoints { get; set; }
         private Image[][] Bricks;
-        private Image Ball;
-        private Point BallPosition;
-        private int BallSpeedX;
-        private int BallSpeedY;
 
         private Random random;
 
-        public Game()
+        public Game(int width, int height)
         {
+            Ball = new Ball();
+
+
             Level = 0;
             Bricks = new Image[5][];
             for (int i = 0; i < Bricks.Length; i++)
                 Bricks[i] = new Image[4];
-            Ball = Resources.Ball;
-            BallPosition = new Point(300, 450);
-            BallSpeedX = -8;
-            BallSpeedY = -8;
 
             random = new Random();
 
@@ -82,8 +84,8 @@ namespace CollegeBreaker
 
         public void Draw(Graphics graphics)
         {
-            MoveBall();
-            graphics.DrawImageUnscaled(Ball, BallPosition);
+            Ball.MoveBall(Ball.BrickCollision.None);
+            Ball.Draw(graphics);
             CheckCollision();
             DrawBricks(graphics);
         }
@@ -102,80 +104,57 @@ namespace CollegeBreaker
 
         private void CheckCollision()
         {
+            bool once = true;
             for (int i = 0; i < Bricks.Length; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
-                        if (DoOverlap(new Point(50 + 106 * i, 90 + 51 * j), BallPosition))
+                        if (DoOverlap(new Point(50 + 106 * i, 90 + 51 * j), Ball.GetBallPosition, once))
                         {
                             Bricks[i][j] = null;
+                            once = false;
                         }
                     }
                 }
             }
         }
 
-        private bool DoOverlap(Point brick, Point ball)
+        private bool DoOverlap(Point brick, Point ball, bool once)
         {
             List<Point> radiusPoints = new List<Point>();
-            for (double angle = 0.0; angle < 2.0 * Math.PI; angle += (Math.PI / 180) * 15)
+            for (double angle = 0.0; angle < 2.0 * Math.PI; angle += (Math.PI / 180) * 45)
             {
                 radiusPoints.Add(new Point(ball.X + 17 + (int)(17 * Math.Cos(angle)), ball.Y + 17 + (int)(17 * Math.Sin(angle))));
             }
 
-            foreach(Point p in radiusPoints)
+            for (int i = 0; i < radiusPoints.Count; i++)
+            {
+                if (radiusPoints[i].X >= brick.X && radiusPoints[i].X <= brick.X + 100)
+                    if (radiusPoints[i].Y >= brick.Y && radiusPoints[i].Y <= brick.Y + 45)
+                    {
+                        if (once)
+                        {
+                            if (i == 0) Ball.MoveBall(Ball.BrickCollision.Right);
+                            if (i == 6 || i == 5 || i == 7) Ball.MoveBall(Ball.BrickCollision.Top);
+                            if (i == 4) Ball.MoveBall(Ball.BrickCollision.Left);
+                            if (i == 2 || i == 3 || i == 1) Ball.MoveBall(Ball.BrickCollision.Bottom);
+                        }
+
+                        return true;
+                    }
+            }
+
+            /*
+            foreach (Point p in radiusPoints)
             {
                 if (p.X >= brick.X && p.X <= brick.X + 100)
                     if (p.Y >= brick.Y && p.Y <= brick.Y + 45)
                         return true;
             }
-
+            */
             return false;
-        }
-
-
-
-        private void MoveBall()
-        {
-            int x = BallPosition.X + BallSpeedX;
-            int y = BallPosition.Y + BallSpeedY;
-
-            bool hitXBorder = false;
-            bool hitYBorder = false;
-
-            if (x <= 0)
-            {
-                hitXBorder = true;
-                BallPosition.X = 0;
-                BallSpeedX = -BallSpeedX;
-            }
-            if (x >= 589)
-            {
-                hitXBorder = true;
-                BallPosition.X = 589;
-                BallSpeedX = -BallSpeedX;
-            }
-
-            if (y <= 45)
-            {
-                hitYBorder = true;
-                BallPosition.Y = 45;
-                BallSpeedY = -BallSpeedY;
-            }
-
-            if (y >= 515)
-            {
-                hitYBorder = true;
-                BallPosition.Y = 515;
-                BallSpeedY = -BallSpeedY;
-            }
-
-            if (!hitXBorder)
-                BallPosition.X = BallPosition.X + BallSpeedX;
-            if (!hitYBorder)
-                BallPosition.Y = BallPosition.Y + BallSpeedY;
         }
     }
 }

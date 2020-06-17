@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ball.cs" />
     <Compile Include="ControlHandler.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameForm.cs">
