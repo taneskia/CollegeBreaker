@@ -21,3 +21,5 @@ D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\College
 D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.pdb
 D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.PlayerName.resources
 C:\Users\Andrej\source\repos\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.PlayerName.resources
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.ScoreForm.resources
+D:\Stefan\Projects\Visual Studio\CollegeBreaker\CollegeBreaker\obj\Debug\CollegeBreaker.ToolsForm.resources

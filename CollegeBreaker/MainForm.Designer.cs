@@ -33,6 +33,7 @@ namespace CollegeBreaker
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.PanelMain = new System.Windows.Forms.Panel();
             this.ButtonPlay = new System.Windows.Forms.Button();
             this.LabelTop3 = new System.Windows.Forms.Label();
@@ -41,6 +42,7 @@ namespace CollegeBreaker
             this.LabelTop1 = new System.Windows.Forms.Label();
             this.LabelScoreboard = new System.Windows.Forms.Label();
             this.LabelTitle = new System.Windows.Forms.Label();
+            this.TimerPlayerMove = new System.Windows.Forms.Timer(this.components);
             this.PanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -186,5 +188,6 @@ namespace CollegeBreaker
         private System.Windows.Forms.Label LabelTop1;
         private System.Windows.Forms.Button ButtonPlay;
         private System.Windows.Forms.Label LabelTop3;
+        private System.Windows.Forms.Timer TimerPlayerMove;
     }
 }

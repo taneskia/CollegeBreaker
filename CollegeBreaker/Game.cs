@@ -2,40 +2,38 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CollegeBreaker
 {
-    class Game
+    public class Game
     {
-        public Ball Ball;
-
-        private int width;
-        private int height;
-
-
+        public Movables movables;
 
         public int Level { get; set; }
         public int[] LevelPoints { get; set; }
-        private Image[][] Bricks;
+        public Image[][] Bricks;
 
         private Random random;
 
-        public Game(int width, int height)
-        {
-            Ball = new Ball();
+        private ScoreForm scoreForm;
 
+        public Game()
+        {
+            movables = new Movables(new Ball(), new Platform());
 
             Level = 0;
+
             Bricks = new Image[5][];
+
             for (int i = 0; i < Bricks.Length; i++)
                 Bricks[i] = new Image[4];
 
             random = new Random();
+        }
 
+        public void SetScoreForm(ScoreForm scoreForm)
+        {
+            this.scoreForm = scoreForm;
         }
 
         public void NextLevel()
@@ -45,7 +43,6 @@ namespace CollegeBreaker
 
         private void GenerateLevel(int level)
         {
-
             for (int i = 0; i < Bricks.Length; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -55,7 +52,7 @@ namespace CollegeBreaker
                     {
                         case 5:
                             Bricks[i][j] = Resources.FailBrick;
-                            Bricks[i][j].Tag = 5;
+                            Bricks[i][j].Tag = -5;
                             break;
                         case 6:
                             Bricks[i][j] = Resources._6_Brick;
@@ -84,8 +81,8 @@ namespace CollegeBreaker
 
         public void Draw(Graphics graphics)
         {
-            Ball.MoveBall(Ball.BrickCollision.None);
-            Ball.Draw(graphics);
+            movables.MoveBall(Movables.BrickCollision.None);
+            movables.Draw(graphics);
             CheckCollision();
             DrawBricks(graphics);
         }
@@ -93,13 +90,9 @@ namespace CollegeBreaker
         public void DrawBricks(Graphics graphics)
         {
             for (int i = 0; i < Bricks.Length; i++)
-            {
                 for (int j = 0; j < 4; j++)
-                {
                     if (Bricks[i][j] != null)
-                        graphics.DrawImageUnscaled(Bricks[i][j], 50 + 106 * i, 90 + 51 * j);
-                }
-            }
+                        graphics.DrawImageUnscaled(Bricks[i][j], 50 + 106 * i, 45 + 51 * j);
         }
 
         private void CheckCollision()
@@ -111,8 +104,9 @@ namespace CollegeBreaker
                 {
                     if (Bricks[i][j] != null)
                     {
-                        if (DoOverlap(new Point(50 + 106 * i, 90 + 51 * j), Ball.GetBallPosition, once))
+                        if (DoOverlap(new Point(50 + 106 * i, 45 + 51 * j), movables.ball.BallPosition, once))
                         {
+                            scoreForm.AddPoints(Convert.ToInt32(Bricks[i][j].Tag));
                             Bricks[i][j] = null;
                             once = false;
                         }
@@ -132,22 +126,23 @@ namespace CollegeBreaker
             for (int i = 0; i < radiusPoints.Count; i++)
             {
                 if (radiusPoints[i].X >= brick.X && radiusPoints[i].X <= brick.X + 100)
+                {
                     if (radiusPoints[i].Y >= brick.Y && radiusPoints[i].Y <= brick.Y + 45)
                     {
                         if (once)
                         {
-                            if (i == 0) Ball.MoveBall(Ball.BrickCollision.Right);
-                            if (i == 6 || i == 5 || i == 7) Ball.MoveBall(Ball.BrickCollision.Top);
-                            if (i == 4) Ball.MoveBall(Ball.BrickCollision.Left);
-                            if (i == 2 || i == 3 || i == 1) Ball.MoveBall(Ball.BrickCollision.Bottom);
+                            if (i == 0) movables.MoveBall(Movables.BrickCollision.Right);
+                            if (i == 6 || i == 5 || i == 7) movables.MoveBall(Movables.BrickCollision.Top);
+                            if (i == 4) movables.MoveBall(Movables.BrickCollision.Left);
+                            if (i == 2 || i == 3 || i == 1) movables.MoveBall(Movables.BrickCollision.Bottom);
                         }
 
                         return true;
                     }
+                }
             }
 
-            /*
-            foreach (Point p in radiusPoints)
+            /*foreach (Point p in radiusPoints)
             {
                 if (p.X >= brick.X && p.X <= brick.X + 100)
                     if (p.Y >= brick.Y && p.Y <= brick.Y + 45)

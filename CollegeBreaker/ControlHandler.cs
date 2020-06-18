@@ -16,6 +16,11 @@ namespace CollegeBreaker
             pfc.AddFontFile("PressStart2P.ttf");
         }
 
+        public static void VerticalAlign(Control control, Panel panel)
+        {
+            control.Location = new Point(control.Location.X, panel.Height / 2 - control.Font.Height / 2);
+        }
+
         public static void ControlAlign(Control control, int fontSize = 28, string position = "Center")
         {
             if (control is Button)
