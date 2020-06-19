@@ -19,16 +19,17 @@ namespace CollegeBreaker
             Height = 550;
 
             game = new Game();
-            game.NextLevel();
+            game.levels.NextLevel();
 
             TimerFPS.Start();
 
-            ControlHandler.ControlAlign(LabelPaused);
+            ControlHandler.ControlAlign(LabelPaused, 28, "Center", Height / 2 - 14);
             ControlHandler.VerticalAlign(LabelPaused, PanelPaused);
         }
 
         private void GameForm_Paint(object sender, PaintEventArgs e)
         {
+            game.Advance();
             game.Draw(e.Graphics);
             e.Graphics.DrawRectangle(new Pen(Color.Black, 4), ClientRectangle);
         }
@@ -36,11 +37,27 @@ namespace CollegeBreaker
         private void TimerFPS_Tick(object sender, EventArgs e)
         {
             Invalidate();
+
+            if (game.GetState() == Game.State.LevelLost)
+            {
+                TimerFPS.Stop();
+                LabelPaused.Text = "Failed";
+                PanelPaused.Visible = true;
+                game.RetryLevel();
+
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.GetType() == typeof(MainForm))
+                    {
+                        (form as MainForm).DisablePauseButton();
+                    }
+                }
+            }
         }
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-            ControlHandler.ControlAlign(PanelPaused);
+            ControlHandler.ControlAlign(PanelPaused, 28, "Center", Height / 2 - 14);
             Location = new Point(Screen.FromControl(this).Bounds.Width / 2 - Width / 2 - ToolsForm.width / 2 - 10, Screen.FromControl(this).Bounds.Height / 2 - Height / 2 + ScoreForm.height / 2 + 10);
         }
 
@@ -87,10 +104,10 @@ namespace CollegeBreaker
             if (move)
             {
                 if (left)
-                    game.movables.MovePlatformLeft();
+                    game.movables.platform.MovePlatformLeft();
 
                 else
-                    game.movables.MovePlatformRight();
+                    game.movables.platform.MovePlatformRight();
             }
         }
     }

@@ -32,10 +32,13 @@ namespace CollegeBreaker
 
         private void SetControls()
         {
-            ControlHandler.ControlAlign(LabelTitle);
-            ControlHandler.ControlAlign(LabelScoreboard, 13);
-            ControlHandler.GroupAlign(new List<Control>() { LabelTop1, LabelTop2, LabelTop3 }, 10, "Right");
-            ControlHandler.GroupAlign(new List<Control>() { ButtonExit, ButtonPlay }, 14);
+            ControlHandler.ControlAlign(LabelTitle, 28, "Center", 50);
+            ControlHandler.ControlAlign(LabelScoreboard, 13, "Center", Height / 2 - 50);
+            ControlHandler.ControlAlign(LabelTop1, 10, "Center", Height / 2);
+            ControlHandler.ControlAlign(LabelTop2, 10, "Center", Height / 2 + LabelTop1.Height + 15);
+            ControlHandler.ControlAlign(LabelTop3, 10, "Center", Height / 2 + LabelTop1.Height + LabelTop2.Height + 30);
+            ControlHandler.ControlAlign(ButtonExit, 14, "Center", Height - 40 - ButtonExit.Height);
+            ControlHandler.ControlAlign(ButtonPlay, 14, "Center", Height - 60 - 2 * ButtonExit.Height);
         }
 
         private void ButtonPlay_Click(object sender, EventArgs e)
@@ -60,6 +63,11 @@ namespace CollegeBreaker
             scoreForm.LocationChanged += new EventHandler(MoveAllHandler);
 
             gameForm.Focus();
+        }
+
+        public void DisablePauseButton()
+        {
+            toolsForm.ButtonPause.Enabled = false;
         }
 
         private void MoveAllHandler(object sender, EventArgs e)

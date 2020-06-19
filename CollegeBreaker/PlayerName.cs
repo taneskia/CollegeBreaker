@@ -13,8 +13,9 @@ namespace CollegeBreaker
             ButtonChoose.MouseEnter += new EventHandler(ImageHandler.MouseEnter);
             ButtonChoose.MouseLeave += new EventHandler(ImageHandler.MouseLeave);
 
-            ControlHandler.ControlAlign(LabelPlayerName, 13);
-            ControlHandler.GroupAlign(new System.Collections.Generic.List<Control>() { TextboxName, ButtonChoose }, 10);
+            ControlHandler.ControlAlign(LabelPlayerName, 13, "Center", Height / 2 - 6);
+            ControlHandler.ControlAlign(TextboxName, 10, "Center", Height / 2 - 5);
+            ControlHandler.ControlAlign(ButtonChoose, 10, "Center", Height / 2 - 15 + TextboxName.Height);
         }
 
         private void ButtonChoose_Click(object sender, EventArgs e)

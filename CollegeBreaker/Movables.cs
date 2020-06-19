@@ -9,7 +9,6 @@ namespace CollegeBreaker
 {
     public class Movables
     {
-        public enum BrickCollision { None, Right, Top, Left, Bottom }
         public Ball ball;
         public Platform platform;
 
@@ -21,107 +20,50 @@ namespace CollegeBreaker
 
         public void Draw(Graphics graphics)
         {
+            PlatformBallInteraction();
             ball.Draw(graphics);
             platform.Draw(graphics);
         }
 
-        public void MovePlatformLeft()
+        public void PlatformBallInteraction()
         {
-            if (platform.PlatformPosition.X - 5 >= platform.PlatformSpeed)
-                platform.PlatformPosition.X -= platform.PlatformSpeed;
-        }
+            int x = ball.BallPosition.X + ball.BallSpeedX;
+            int y = ball.BallPosition.Y + ball.BallSpeedY;
 
-        public void MovePlatformRight()
-        {
-            if (platform.PlatformPosition.X <= 623 - platform.PlatformSpeed - platform.PlatformImage.Width - 5)
-                platform.PlatformPosition.X += platform.PlatformSpeed;
-        }
+            bool hitXBorder = false;
+            bool hitYBorder = false;
 
-        public void MoveBall(BrickCollision brickCollision)
-        {
-            if (brickCollision == BrickCollision.Right)
+            if (y >= 490) // 515
             {
-                ball.BallSpeedX = -ball.BallSpeedX;
-            }
-            if (brickCollision == BrickCollision.Top)
-            {
-                ball.BallSpeedY = -ball.BallSpeedY;
-            }
-            if (brickCollision == BrickCollision.Left)
-            {
-                ball.BallSpeedX = -ball.BallSpeedX;
-            }
-            if (brickCollision == BrickCollision.Bottom)
-            {
-                ball.BallSpeedY = -ball.BallSpeedY;
-            }
+                int ballCenter = x + ball.BallImage.Width / 2;
 
-            if (brickCollision == BrickCollision.None)
-            {
-                int x = ball.BallPosition.X + ball.BallSpeedX;
-                int y = ball.BallPosition.Y + ball.BallSpeedY;
-
-                bool hitXBorder = false;
-                bool hitYBorder = false;
-
-                if (x <= 0)
-                {
-                    hitXBorder = true;
-                    ball.BallPosition.X = 0;
-                    ball.BallSpeedX = -ball.BallSpeedX;
-                }
-                if (x >= 589)
-                {
-                    hitXBorder = true;
-                    ball.BallPosition.X = 589;
-                    ball.BallSpeedX = -ball.BallSpeedX;
-                }
-
-                if (y <= 0)
+                if (ballCenter >= platform.PlatformPosition.X && ballCenter <= platform.PlatformPosition.X + platform.PlatformImage.Width)
                 {
                     hitYBorder = true;
-                    ball.BallPosition.Y = 0;
+                    ball.BallPosition.Y = 485;
                     ball.BallSpeedY = -ball.BallSpeedY;
                 }
 
-                if (y >= 490) // 515
+                #region DetectPlatformPosition
+
+                if (ballCenter >= platform.PlatformPosition.X && ballCenter <= platform.PlatformPosition.X + platform.PlatformImage.Width / 4)
+                    ball.BallSpeedX = -ball.Speed;
+
+                else if (ballCenter >= platform.PlatformPosition.X + platform.PlatformImage.Width / 4 && ballCenter <= platform.PlatformPosition.X + 3 * platform.PlatformImage.Width / 4)
                 {
-                    int ballCenter = x + ball.BallImage.Width / 2;
-                    if (ballCenter >= platform.PlatformPosition.X && ballCenter <= platform.PlatformPosition.X + platform.PlatformImage.Width)
-                    {
-                        hitYBorder = true;
-                        ball.BallPosition.Y = 485;
-                        ball.BallSpeedY = -ball.BallSpeedY;
-                    }
+                    if (ballCenter > platform.PlatformPosition.X + platform.PlatformImage.Width / 2 + 10)
+                        ball.BallSpeedX = ball.Speed / 2;
 
-                    #region DetectPlatformPosition
+                    else if (ballCenter < platform.PlatformPosition.X + platform.PlatformImage.Width / 2 - 10)
+                        ball.BallSpeedX = -(ball.Speed / 2);
 
-                    if (ballCenter >= platform.PlatformPosition.X && ballCenter <= platform.PlatformPosition.X + platform.PlatformImage.Width / 4)
-                        ball.BallSpeedX = -ball.Speed;
-
-                    else if (ballCenter >= platform.PlatformPosition.X + platform.PlatformImage.Width / 4 && ballCenter <= platform.PlatformPosition.X + 3 * platform.PlatformImage.Width / 4)
-                    {
-                        if (ballCenter > platform.PlatformPosition.X + platform.PlatformImage.Width / 2 + 10)
-                            ball.BallSpeedX = ball.Speed / 2;
-
-                        else if (ballCenter < platform.PlatformPosition.X + platform.PlatformImage.Width / 2 - 10)
-                            ball.BallSpeedX = -(ball.Speed / 2);
-
-                        else ball.BallSpeedX = 0;
-                    }
-
-                    else if (ballCenter >= platform.PlatformPosition.X + 3 * platform.PlatformImage.Width / 4 && x <= platform.PlatformPosition.X + platform.PlatformImage.Width)
-                        ball.BallSpeedX = ball.Speed;
-
-                    #endregion DetectPlatformPosition
-
-                    if (y >= 515)
-                    {
-                        ball.BallPosition = new Point(300, 450);
-                        ball.BallSpeedX = -ball.Speed;
-                        ball.BallSpeedY = -ball.Speed;
-                    }
+                    else ball.BallSpeedX = 0;
                 }
+
+                else if (ballCenter >= platform.PlatformPosition.X + 3 * platform.PlatformImage.Width / 4 && x <= platform.PlatformPosition.X + platform.PlatformImage.Width)
+                    ball.BallSpeedX = ball.Speed;
+
+                #endregion DetectPlatformPosition
 
                 if (!hitXBorder)
                     ball.BallPosition.X = ball.BallPosition.X + ball.BallSpeedX;
@@ -129,6 +71,11 @@ namespace CollegeBreaker
                 if (!hitYBorder)
                     ball.BallPosition.Y = ball.BallPosition.Y + ball.BallSpeedY;
             }
+        }
+
+        public bool MoveBall()
+        {
+            return ball.MoveBall(Ball.BrickCollision.None);
         }
     }
 }

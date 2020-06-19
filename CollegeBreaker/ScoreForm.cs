@@ -5,7 +5,7 @@ namespace CollegeBreaker
     public partial class ScoreForm : Form
     {
         public static int height;
-        private int fontSize = 12;
+        private int fontSize = 10;
         private int totalScore = 0;
         private int score = 0;
 

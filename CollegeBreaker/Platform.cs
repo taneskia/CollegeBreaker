@@ -20,5 +20,18 @@ namespace CollegeBreaker
         {
             graphics.DrawImageUnscaled(PlatformImage, PlatformPosition);
         }
+
+        public void MovePlatformLeft()
+        {
+            if (PlatformPosition.X - 5 >= PlatformSpeed)
+                PlatformPosition.X -= PlatformSpeed;
+        }
+
+        public void MovePlatformRight()
+        {
+            if (PlatformPosition.X <= 623 - PlatformSpeed - PlatformImage.Width - 5)
+                PlatformPosition.X += PlatformSpeed;
+        }
+
     }
 }

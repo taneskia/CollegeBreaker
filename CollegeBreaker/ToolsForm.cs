@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CollegeBreaker
@@ -19,6 +13,9 @@ namespace CollegeBreaker
         {
             InitializeComponent();
 
+            Width = 200;
+            Height = 615;
+
             width = Width;
             pause = false;
 
@@ -28,11 +25,19 @@ namespace CollegeBreaker
             ButtonPause.MouseEnter += new EventHandler(ImageHandler.MouseEnter);
             ButtonPause.MouseLeave += new EventHandler(ImageHandler.MouseLeave);
 
+            ButtonRetry.MouseEnter += new EventHandler(ImageHandler.MouseEnter);
+            ButtonRetry.MouseLeave += new EventHandler(ImageHandler.MouseLeave);
+
             ButtonExit.Click += new EventHandler(WindowHandler.Exit);
 
-            ControlHandler.ControlAlign(ButtonExit, 14);
-            ControlHandler.ControlAlign(ButtonPause, 14);
-            ControlHandler.ControlAlign(LabelTime, 20);
+            ButtonExit.Size = new Size(Width - 31, ButtonExit.Height);
+            ButtonPause.Size = new Size(Width - 31, ButtonPause.Height);
+            ButtonRetry.Size = new Size(Width - 31, ButtonRetry.Height);
+
+            ControlHandler.ControlAlign(ButtonRetry, 14, "Center", Height - ButtonRetry.Height - ButtonPause.Height - ButtonExit.Height - 42);
+            ControlHandler.ControlAlign(ButtonPause, 14, "Center", Height - ButtonPause.Height - ButtonExit.Height - 28);
+            ControlHandler.ControlAlign(ButtonExit, 14, "Center", Height - ButtonExit.Height - 14);
+            ControlHandler.ControlAlign(LabelTime, 15, "Center", 40);
 
             TimerCount.Start();
         }

@@ -21,7 +21,7 @@ namespace CollegeBreaker
             control.Location = new Point(control.Location.X, panel.Height / 2 - control.Font.Height / 2);
         }
 
-        public static void ControlAlign(Control control, int fontSize = 28, string position = "Center")
+        public static void ControlAlign(Control control, int fontSize, string horizontalPosition, int verticalPosition)
         {
             if (control is Button)
             {
@@ -31,61 +31,23 @@ namespace CollegeBreaker
 
             SetFont(control, fontSize);
 
-            switch(position)
+            switch(horizontalPosition)
             {
                 case "Right":
-                    control.Location = new Point(control.FindForm().Width - control.Width, control.Location.Y);
+                    control.Location = new Point(control.FindForm().Width - control.Width, verticalPosition);
                     break;
                 case "Left":
-                    control.Location = new Point(10, control.Location.Y);
+                    control.Location = new Point(10, verticalPosition);
                     break;
                 default:
-                    control.Location = new Point(control.FindForm().Width / 2 - control.Width / 2, control.Location.Y);
+                    control.Location = new Point(control.FindForm().Width / 2 - control.Width / 2, verticalPosition);
                     break;
             }                
         }
+
         public static void SetFont(Control control, int fontSize)
         {
             control.Font = new Font(pfc.Families[0], fontSize, FontStyle.Regular);
-        }
-
-        public static void GroupAlign(List<Control> controlList, int fontSize = 28, string position = "Center")
-        {
-            Control largest = controlList.First();
-            int max = controlList.First().Width;
-
-            foreach (Control control in controlList)
-            {
-                if (control.Width > max)
-                {
-                    max = control.Width;
-                    largest = control;
-                }
-            }
-
-            ControlAlign(largest, fontSize, position);
-
-            switch(position)
-            {
-                case "Right":
-                    foreach (Control control in controlList)
-                    {
-                        SetFont(control, fontSize);
-                        control.Location = new Point(largest.Location.X + largest.Width - control.FindForm().Width / 3 - control.Width, control.Location.Y);
-                    }
-                    break;
-                case "Left":
-                    foreach (Control control in controlList)
-                    {
-                        SetFont(control, fontSize);
-                        control.Location = new Point((int)(largest.Location.X + 1.5 * largest.Width - control.FindForm().Width / 3), control.Location.Y);
-                    }
-                    break;
-                default:
-                    foreach (Control control in controlList)
-                        ControlAlign(control, fontSize);
-                    break;
-            }
         }
     }
 }
