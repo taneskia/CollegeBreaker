@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace CollegeBreaker
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IObserver<GameInfo>
     {
         public GameForm gameForm = new GameForm();
         public ScoreForm scoreForm = new ScoreForm();
@@ -26,6 +26,8 @@ namespace CollegeBreaker
             ButtonPlay.MouseLeave += new EventHandler(ImageHandler.MouseLeave);
 
             SetControls();
+
+            Game.GetInstance().Subscribe(this);
         }
 
         private void SetControls()
@@ -58,19 +60,27 @@ namespace CollegeBreaker
             toolsForm.Location = new Point(gameForm.Location.X + gameForm.Width + 10, gameForm.Location.Y - scoreForm.Height - 10);
 
             gameForm.Focus();
-
-            gameForm.game.levels.SetScoreForm(scoreForm);
-        }
-
-        public void DisablePauseButton()
-        {
-            toolsForm.ButtonPause.Enabled = toolsForm.ButtonPause.Visible = false;
         }
 
         private void MoveAllHandler(object sender, EventArgs e)
         {
             gameForm.Location = new Point(scoreForm.Location.X, scoreForm.Location.Y + scoreForm.Height + 10);
             toolsForm.Location = new Point(gameForm.Location.X + gameForm.Width + 10, scoreForm.Location.Y);
+        }
+
+        public void OnNext(GameInfo value)
+        {
+            
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
         }
     }
 }

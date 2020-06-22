@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace CollegeBreaker
 {
-    public partial class GameForm : Form
+    public partial class GameForm : Form, IObserver<GameInfo>
     {
         public Game game;
         public bool left;
@@ -17,13 +17,14 @@ namespace CollegeBreaker
             Width = 624;
             Height = 550;
 
-            game = new Game();
+            game = Game.GetInstance();
+            game.Subscribe(this);
             game.levels.NextLevel();
 
             TimerFPS.Start();
 
             ControlHandler.ControlAlign(LabelPaused, 28, Height / 2 - 14);
-            ControlHandler.VerticalAlign(LabelPaused, PanelPaused);
+            ControlHandler.VerticalAlign(LabelPaused, Height);
         }
 
         private void GameForm_Paint(object sender, PaintEventArgs e)
@@ -36,22 +37,6 @@ namespace CollegeBreaker
         private void TimerFPS_Tick(object sender, EventArgs e)
         {
             Invalidate();
-
-            if (game.GetState() == Game.State.LevelLost)
-            {
-                TimerFPS.Stop();
-                LabelPaused.Text = "Failed";
-                PanelPaused.Visible = true;
-
-                foreach (Form form in Application.OpenForms)
-                {
-                    if (form.GetType() == typeof(MainForm))
-                    {
-                        (form as MainForm).DisablePauseButton();
-                        (form as MainForm).toolsForm.TimerCount.Stop();
-                    }
-                }
-            }
         }
 
         private void GameForm_Load(object sender, EventArgs e)
@@ -109,6 +94,72 @@ namespace CollegeBreaker
 
             else if (!left && move)
                 game.movables.platform.MovePlatformRight();
+        }
+
+        public void OnNext(GameInfo info)
+        {
+            if (info.State == Game.State.GameBeat) 
+            {
+                LabelPaused.Text = "Congratulations!\nYou've graduated!";
+                ControlHandler.ControlAlign(LabelPaused, 28, Height / 2 - 14);
+                PanelPaused.Visible = true;
+            }
+
+            if(info.State == Game.State.LevelLost)
+            {
+                TimerFPS.Stop();
+                LabelPaused.Text = "Failed";
+                PanelPaused.Visible = true;
+
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.GetType() == typeof(MainForm))
+                    {   
+                        (form as MainForm).toolsForm.ButtonPause.Enabled = (form as MainForm).toolsForm.ButtonPause.Visible = false;
+                        (form as MainForm).toolsForm.TimerCount.Stop();
+                    }
+                }
+            }
+
+            if (info.State == Game.State.LevelBeat)
+            {
+                TimerFPS.Stop();
+                LabelPaused.Text = "Semester\nPassed";
+                ControlHandler.ControlAlign(LabelPaused, 28, Height / 2 - 14);
+                PanelPaused.Visible = true;
+
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.GetType() == typeof(MainForm))
+                    {
+                        (form as MainForm).toolsForm.TimerCount.Stop();
+                    }
+                }
+            }
+
+            if (info.State == Game.State.Running)
+            {
+                TimerFPS.Start();
+                LabelPaused.Text = "Paused";
+                PanelPaused.Visible = false;
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form.GetType() == typeof(MainForm))
+                    {
+                        (form as MainForm).toolsForm.ButtonPause.Enabled = (form as MainForm).toolsForm.ButtonPause.Visible = true;
+                    }
+                }
+            }
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
         }
     }
 }

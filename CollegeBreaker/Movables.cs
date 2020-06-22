@@ -84,5 +84,11 @@ namespace CollegeBreaker
         {
             return ball.MoveBall(Ball.BrickCollision.None);
         }
+
+        public void Reset()
+        {
+            platform.Reset();
+            ball.Reset();
+        }
     }
 }

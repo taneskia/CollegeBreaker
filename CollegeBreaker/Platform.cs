@@ -35,5 +35,10 @@ namespace CollegeBreaker
                 PlatformPosition.X += PlatformSpeed;
             }
         }
+
+        public void Reset()
+        {
+            PlatformPosition = new Point(314 - PlatformImage.Width / 2, 520);
+        }
     }
 }

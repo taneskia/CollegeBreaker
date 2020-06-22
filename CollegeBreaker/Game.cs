@@ -1,22 +1,44 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace CollegeBreaker
 {
-    public class Game
+    public class Game : IObservable<GameInfo>, IObserver<List<List<int>>>
     {
+        private static readonly Game INSTANCE = new Game();
+        private List<IObserver<GameInfo>> observers;
         public enum State { Running, LevelBeat, LevelLost, GameBeat, GameLost }
         public Movables movables;
         public Levels levels;
         private bool levelLost;
 
-        public Game()
+        private Game()
         {
+            observers = new List<IObserver<GameInfo>>();
             movables = new Movables(new Ball(), new Platform());
             levels = new Levels();
+            levels.Subscribe(this);
+        }
+
+        public static Game GetInstance()
+        {
+            return INSTANCE;
         }
 
         public State GetState()
         {
+            /*
+            if (levels.GetMeanGrade() < 5 && levels.PointsFromLevels.Count != 0)
+            {
+                return State.LevelLost;
+            }
+            */
+            if (levels.BrickCount == 0)
+            {
+                return State.LevelBeat;
+            }
+
             if (levelLost)
             {
                 return State.LevelLost;
@@ -25,11 +47,6 @@ namespace CollegeBreaker
             if (levels.CurrentLevelNumber == 8 && levels.BrickCount == 0)
             {
                 return State.GameBeat;
-            }
-
-            if (levels.BrickCount == 0)
-            {
-                return State.LevelBeat;
             }
 
             return State.Running;
@@ -44,11 +61,23 @@ namespace CollegeBreaker
         public void Advance()
         {
             levelLost = !movables.MoveBall();
+
+            if (levelLost)
+                foreach (IObserver<GameInfo> o in observers)
+                    o.OnNext(new GameInfo(levels.PointsFromLevels, GetState()));
+
             levels.CheckCollisionWithBall(movables.ball);
         }
 
         public void NextLevel()
         {
+            if (levels.CurrentLevelNumber % 2 == 0)
+            {
+                movables.ball.Speed += 1;
+                movables.platform.PlatformSpeed += 1;
+            }
+
+            movables.Reset();
             levels.NextLevel();
         }
 
@@ -56,6 +85,56 @@ namespace CollegeBreaker
         {
             movables.ball.Reset();
             levels.RetryLevel();
+
+            foreach (IObserver<GameInfo> o in observers)
+                o.OnNext(new GameInfo(levels.PointsFromLevels, State.Running));
+        }
+
+        public IDisposable Subscribe(IObserver<GameInfo> observer)
+        {
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+                // Provide observer with existing data.
+                GameInfo gameInfo = new GameInfo(levels.PointsFromLevels, GetState());
+                observer.OnNext(gameInfo);
+            }
+            return new Unsubscriber<GameInfo>(observers, observer);
+        }
+
+        public void OnNext(List<List<int>> value)
+        {
+            GameInfo gameInfo = new GameInfo(value, GetState());
+            foreach (IObserver<GameInfo> o in observers)
+                o.OnNext(gameInfo);
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal class Unsubscriber<GameInfo> : IDisposable
+        {
+            private List<IObserver<GameInfo>> _observers;
+            private IObserver<GameInfo> _observer;
+
+            internal Unsubscriber(List<IObserver<GameInfo>> observers, IObserver<GameInfo> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
     }
 }

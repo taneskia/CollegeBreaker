@@ -5,10 +5,11 @@ using System.Drawing;
 
 namespace CollegeBreaker
 {
-    public class Levels
+    public class Levels : IObservable<List<List<int>>>
     {
+        private List<IObserver<List<List<int>>>> observers;
         public int CurrentLevelNumber { get; set; }
-        public int[] PointsFromLevels { get; set; }
+        public List<List<int>> PointsFromLevels { get; set; }
         public int BrickCount { get; set; }
 
         public int LevelTime { get { return 90 - ((CurrentLevelNumber - 1) * 10); } }
@@ -16,35 +17,49 @@ namespace CollegeBreaker
         public Image[][] Bricks;
         private readonly Random random;
 
-        private ScoreForm scoreForm;
-
         public Levels()
         {
+            observers = new List<IObserver<List<List<int>>>>();
             CurrentLevelNumber = 0;
-            PointsFromLevels = new int[8];
-            BrickCount = 20;
+            PointsFromLevels = new List<List<int>>();
+            BrickCount = 6;
 
-            Bricks = new Image[5][];
+            Bricks = new Image[3][];
 
             for (int i = 0; i < Bricks.Length; i++)
-                Bricks[i] = new Image[4];
+                Bricks[i] = new Image[2];
 
             random = new Random();
         }
 
-        public void SetScoreForm(ScoreForm s)
+        public float GetMeanGrade()
         {
-            scoreForm = s;
+            int count = 0;
+            float sum = 0;
+
+            foreach (List<int> levelPoints in PointsFromLevels)
+            {
+                foreach (int pts in levelPoints)
+                {
+                    sum += pts;
+                    count++;
+                }
+            }
+
+            if (count != 0)
+                return sum / count;
+            return 0;
         }
 
         public void NextLevel()
         {
+            PointsFromLevels.Add(new List<int>());
             GenerateLevel(++CurrentLevelNumber);
         }
 
         public void RetryLevel()
         {
-            PointsFromLevels[CurrentLevelNumber] = 0;
+            PointsFromLevels[CurrentLevelNumber - 1] = new List<int>();
             GenerateLevel(CurrentLevelNumber);
         }
 
@@ -52,7 +67,7 @@ namespace CollegeBreaker
         {
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     int randomBrick = random.Next(5, 11);
                     switch (randomBrick)
@@ -91,7 +106,7 @@ namespace CollegeBreaker
             int brickCount = 0;
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
@@ -102,6 +117,9 @@ namespace CollegeBreaker
             }
 
             BrickCount = brickCount;
+            if (BrickCount == 0)
+                foreach (IObserver<List<List<int>>> o in observers)
+                    o.OnNext(PointsFromLevels);
         }
 
         public void CheckCollisionWithBall(Ball ball)
@@ -109,16 +127,17 @@ namespace CollegeBreaker
             bool once = true;
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
                         if (DoOverlap(new Point(50 + 106 * i, 45 + 51 * j), ball, once))
                         {
-                            scoreForm.AddPoints(Convert.ToInt32(Bricks[i][j].Tag));
-                            PointsFromLevels[CurrentLevelNumber] = Convert.ToInt32(Bricks[i][j].Tag);
+                            PointsFromLevels[CurrentLevelNumber - 1].Add(Convert.ToInt32(Bricks[i][j].Tag));
                             Bricks[i][j] = null;
                             once = false;
+                            foreach (IObserver<List<List<int>>> o in observers)
+                                o.OnNext(PointsFromLevels);
                         }
                     }
                 }
@@ -167,6 +186,35 @@ namespace CollegeBreaker
                 }
             }
             return false;
+        }
+
+        public IDisposable Subscribe(IObserver<List<List<int>>> observer)
+        {
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+                // Provide observer with existing data.
+                observer.OnNext(PointsFromLevels);
+            }
+            return new Unsubscriber<List<List<int>>>(observers, observer);
+        }
+
+        private class Unsubscriber<T> : IDisposable
+        {
+            private List<IObserver<List<List<int>>>> _observers;
+            private IObserver<List<List<int>>> _observer;
+
+            public Unsubscriber(List<IObserver<List<List<int>>>> observers, IObserver<List<List<int>>> observer)
+            {
+                _observers = observers;
+                _observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
     }
 }
