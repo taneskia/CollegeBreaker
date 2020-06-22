@@ -29,10 +29,8 @@
         private void InitializeComponent()
         {
             this.PanelMain = new System.Windows.Forms.Panel();
-            this.LabelScoreValue = new System.Windows.Forms.Label();
-            this.LabelScoreText = new System.Windows.Forms.Label();
-            this.LabelTotalScoreValue = new System.Windows.Forms.Label();
-            this.LabelTotalScoreText = new System.Windows.Forms.Label();
+            this.LabelSemester = new System.Windows.Forms.Label();
+            this.LabelMeanGrade = new System.Windows.Forms.Label();
             this.PanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,99 +38,65 @@
             // 
             this.PanelMain.BackColor = System.Drawing.Color.LightBlue;
             this.PanelMain.CausesValidation = false;
-            this.PanelMain.Controls.Add(this.LabelScoreValue);
-            this.PanelMain.Controls.Add(this.LabelScoreText);
-            this.PanelMain.Controls.Add(this.LabelTotalScoreValue);
-            this.PanelMain.Controls.Add(this.LabelTotalScoreText);
+            this.PanelMain.Controls.Add(this.LabelSemester);
+            this.PanelMain.Controls.Add(this.LabelMeanGrade);
             this.PanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelMain.Location = new System.Drawing.Point(3, 2);
-            this.PanelMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.PanelMain.Location = new System.Drawing.Point(2, 2);
             this.PanelMain.Name = "PanelMain";
-            this.PanelMain.Size = new System.Drawing.Size(826, 64);
+            this.PanelMain.Size = new System.Drawing.Size(620, 51);
             this.PanelMain.TabIndex = 0;
             // 
-            // LabelScoreValue
+            // LabelSemester
             // 
-            this.LabelScoreValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.LabelSemester.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.LabelScoreValue.AutoSize = true;
-            this.LabelScoreValue.CausesValidation = false;
-            this.LabelScoreValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelScoreValue.Location = new System.Drawing.Point(571, 16);
-            this.LabelScoreValue.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.LabelScoreValue.Name = "LabelScoreValue";
-            this.LabelScoreValue.Size = new System.Drawing.Size(29, 31);
-            this.LabelScoreValue.TabIndex = 3;
-            this.LabelScoreValue.Text = "0";
+            this.LabelSemester.AutoSize = true;
+            this.LabelSemester.CausesValidation = false;
+            this.LabelSemester.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelSemester.Location = new System.Drawing.Point(474, 13);
+            this.LabelSemester.Margin = new System.Windows.Forms.Padding(10);
+            this.LabelSemester.Name = "LabelSemester";
+            this.LabelSemester.Size = new System.Drawing.Size(130, 26);
+            this.LabelSemester.TabIndex = 2;
+            this.LabelSemester.Text = "Semester: 0";
             // 
-            // LabelScoreText
+            // LabelMeanGrade
             // 
-            this.LabelScoreText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.LabelMeanGrade.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.LabelScoreText.AutoSize = true;
-            this.LabelScoreText.CausesValidation = false;
-            this.LabelScoreText.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelScoreText.Location = new System.Drawing.Point(325, 16);
-            this.LabelScoreText.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.LabelScoreText.Name = "LabelScoreText";
-            this.LabelScoreText.Size = new System.Drawing.Size(165, 31);
-            this.LabelScoreText.TabIndex = 2;
-            this.LabelScoreText.Text = "Level Score:";
-            // 
-            // LabelTotalScoreValue
-            // 
-            this.LabelTotalScoreValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.LabelTotalScoreValue.AutoSize = true;
-            this.LabelTotalScoreValue.CausesValidation = false;
-            this.LabelTotalScoreValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelTotalScoreValue.Location = new System.Drawing.Point(270, 16);
-            this.LabelTotalScoreValue.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.LabelTotalScoreValue.Name = "LabelTotalScoreValue";
-            this.LabelTotalScoreValue.Size = new System.Drawing.Size(29, 31);
-            this.LabelTotalScoreValue.TabIndex = 1;
-            this.LabelTotalScoreValue.Text = "0";
-            // 
-            // LabelTotalScoreText
-            // 
-            this.LabelTotalScoreText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.LabelTotalScoreText.AutoSize = true;
-            this.LabelTotalScoreText.CausesValidation = false;
-            this.LabelTotalScoreText.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelTotalScoreText.Location = new System.Drawing.Point(25, 16);
-            this.LabelTotalScoreText.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.LabelTotalScoreText.Name = "LabelTotalScoreText";
-            this.LabelTotalScoreText.Size = new System.Drawing.Size(161, 31);
-            this.LabelTotalScoreText.TabIndex = 0;
-            this.LabelTotalScoreText.Text = "Total Score:";
+            this.LabelMeanGrade.AutoSize = true;
+            this.LabelMeanGrade.CausesValidation = false;
+            this.LabelMeanGrade.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelMeanGrade.Location = new System.Drawing.Point(19, 13);
+            this.LabelMeanGrade.Margin = new System.Windows.Forms.Padding(10);
+            this.LabelMeanGrade.Name = "LabelMeanGrade";
+            this.LabelMeanGrade.Size = new System.Drawing.Size(156, 26);
+            this.LabelMeanGrade.TabIndex = 0;
+            this.LabelMeanGrade.Text = "Mean Grade: 0";
             // 
             // ScoreForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.BackColor = System.Drawing.Color.Black;
             this.CausesValidation = false;
-            this.ClientSize = new System.Drawing.Size(832, 68);
+            this.ClientSize = new System.Drawing.Size(624, 55);
             this.Controls.Add(this.PanelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ScoreForm";
-            this.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Padding = new System.Windows.Forms.Padding(2);
             this.Text = "College Breaker Score";
             this.PanelMain.ResumeLayout(false);
             this.PanelMain.PerformLayout();
             this.ResumeLayout(false);
 
-        }
+}
 
         #endregion
 
         private System.Windows.Forms.Panel PanelMain;
-        private System.Windows.Forms.Label LabelTotalScoreText;
-        private System.Windows.Forms.Label LabelTotalScoreValue;
-        private System.Windows.Forms.Label LabelScoreValue;
-        private System.Windows.Forms.Label LabelScoreText;
+        private System.Windows.Forms.Label LabelMeanGrade;
+        private System.Windows.Forms.Label LabelSemester;
     }
 }

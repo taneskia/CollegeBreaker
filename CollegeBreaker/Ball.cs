@@ -1,6 +1,4 @@
-﻿using CollegeBreaker.Properties;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Drawing;
 
 namespace CollegeBreaker
 {
@@ -15,10 +13,8 @@ namespace CollegeBreaker
 
         public Ball()
         {
-            BallImage = Resources.Ball;
-            BallPosition = new Point(300, 450);
-            BallSpeedX = -Speed;
-            BallSpeedY = -Speed;
+            BallImage = Properties.Resources.Ball;
+            Reset();
         }
 
         public void IncreaseSpeed(int increment)
@@ -79,7 +75,6 @@ namespace CollegeBreaker
                     BallSpeedY = -BallSpeedY;
                 }
 
-
                 if (y >= 515)
                 {
                     BallPosition = new Point(BallPosition.X, 515);
@@ -88,11 +83,23 @@ namespace CollegeBreaker
             }
 
             if (!hitXBorder)
+            {
                 BallPosition.X = BallPosition.X + BallSpeedX;
+            }
 
             if (!hitYBorder)
+            {
                 BallPosition.Y = BallPosition.Y + BallSpeedY;
+            }
+
             return true;
+        }
+
+        public void Reset()
+        {
+            BallPosition = new Point(300, 450);
+            BallSpeedX = -Speed;
+            BallSpeedY = -Speed;
         }
     }
 }

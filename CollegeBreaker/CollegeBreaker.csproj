@@ -190,5 +190,11 @@
   <ItemGroup>
     <None Include="Resources\Platform.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pause_Clean.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Retry_Clean.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

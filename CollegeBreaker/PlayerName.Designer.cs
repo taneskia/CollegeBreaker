@@ -98,8 +98,7 @@
             this.PanelMain.ResumeLayout(false);
             this.PanelMain.PerformLayout();
             this.ResumeLayout(false);
-
-        }
+}
 
         #endregion
 

@@ -1,7 +1,4 @@
-﻿using CollegeBreaker.Properties;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace CollegeBreaker
 {
@@ -11,7 +8,6 @@ namespace CollegeBreaker
         public Movables movables;
         public Levels levels;
         private bool levelLost;
-        private ScoreForm scoreForm;
 
         public Game()
         {
@@ -22,17 +18,21 @@ namespace CollegeBreaker
         public State GetState()
         {
             if (levelLost)
+            {
                 return State.LevelLost;
-            if (levels.CurrentLevelNumber == 8 && levels.BrickCount == 0)
-                return State.GameBeat;
-            if (levels.BrickCount == 0)
-                return State.LevelBeat;
-            return State.Running;
-        }
+            }
 
-        public void SetScoreForm(ScoreForm scoreForm)
-        {
-            this.scoreForm = scoreForm;
+            if (levels.CurrentLevelNumber == 8 && levels.BrickCount == 0)
+            {
+                return State.GameBeat;
+            }
+
+            if (levels.BrickCount == 0)
+            {
+                return State.LevelBeat;
+            }
+
+            return State.Running;
         }
 
         public void Draw(Graphics graphics)
@@ -54,6 +54,7 @@ namespace CollegeBreaker
 
         public void RetryLevel()
         {
+            movables.ball.Reset();
             levels.RetryLevel();
         }
     }

@@ -5,9 +5,8 @@ namespace CollegeBreaker
     public partial class ScoreForm : Form
     {
         public static int height;
-        private int fontSize = 10;
-        private int totalScore = 0;
-        private int score = 0;
+        private float currentGrade = 0;
+        private float meanGrade = 0f;
 
         public ScoreForm()
         {
@@ -17,33 +16,39 @@ namespace CollegeBreaker
             Height = height = 55;
 
             PanelMain.MouseMove += new MouseEventHandler(WindowHandler.Drag);
-            LabelTotalScoreText.MouseMove += new MouseEventHandler(WindowHandler.Drag);
-            LabelTotalScoreValue.MouseMove += new MouseEventHandler(WindowHandler.Drag);
-            LabelScoreText.MouseMove += new MouseEventHandler(WindowHandler.Drag);
-            LabelScoreValue.MouseMove += new MouseEventHandler(WindowHandler.Drag);
+            LabelMeanGrade.MouseMove += new MouseEventHandler(WindowHandler.Drag);
+            LabelSemester.MouseMove += new MouseEventHandler(WindowHandler.Drag);
 
-            ControlHandler.SetFont(LabelTotalScoreText, fontSize);
-            ControlHandler.SetFont(LabelTotalScoreValue, fontSize);
-            ControlHandler.SetFont(LabelScoreText, fontSize);
-            ControlHandler.SetFont(LabelScoreValue, fontSize);
+            ControlHandler.SetFont(LabelMeanGrade, 10);
+            ControlHandler.SetFont(LabelSemester, 10);
 
-            ControlHandler.VerticalAlign(LabelTotalScoreText, PanelMain);
-            ControlHandler.VerticalAlign(LabelTotalScoreValue, PanelMain);
-            ControlHandler.VerticalAlign(LabelScoreText, PanelMain);
-            ControlHandler.VerticalAlign(LabelScoreValue, PanelMain);
+            ControlHandler.VerticalAlign(LabelMeanGrade, PanelMain);
+            ControlHandler.VerticalAlign(LabelSemester, PanelMain);
+
+            LabelMeanGrade.Location = new System.Drawing.Point(Location.X + Height / 3, LabelMeanGrade.Location.Y);
+            LabelSemester.Location = new System.Drawing.Point(Location.X + Width - LabelSemester.Width - Height / 2, LabelSemester.Location.Y);
         }
 
-        public void AddPoints(int score)
+        private float CalculateMeanGrade()
         {
-            this.score += score;
-            totalScore += score;
-            LabelTotalScoreValue.Text = totalScore.ToString();
-            LabelScoreValue.Text = this.score.ToString();
+            meanGrade += currentGrade / 20;
+            return meanGrade;
         }
 
-        public void ClearLevelScore()
+        public void AddPoints(int points)
         {
-            score = 0;
+            currentGrade += points;
+            LabelMeanGrade.Text = "Mean Grade: " + CalculateMeanGrade();
+        }
+
+        public void SetSemester(int semester)
+        {
+            LabelSemester.Text = "Semester: " + semester;
+        }
+
+        public void ClearLevelGrades()
+        {
+            currentGrade = 0;
         }
     }
 }

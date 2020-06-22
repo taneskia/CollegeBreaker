@@ -153,6 +153,16 @@ namespace CollegeBreaker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Pause_Clean {
+            get {
+                object obj = ResourceManager.GetObject("Pause_Clean", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Platform {
             get {
                 object obj = ResourceManager.GetObject("Platform", resourceCulture);
@@ -176,6 +186,16 @@ namespace CollegeBreaker.Properties {
         internal static System.Drawing.Bitmap Play_Clean {
             get {
                 object obj = ResourceManager.GetObject("Play_Clean", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Retry_Clean {
+            get {
+                object obj = ResourceManager.GetObject("Retry_Clean", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

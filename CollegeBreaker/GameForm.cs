@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace CollegeBreaker
 {
@@ -23,7 +22,7 @@ namespace CollegeBreaker
 
             TimerFPS.Start();
 
-            ControlHandler.ControlAlign(LabelPaused, 28, "Center", Height / 2 - 14);
+            ControlHandler.ControlAlign(LabelPaused, 28, Height / 2 - 14);
             ControlHandler.VerticalAlign(LabelPaused, PanelPaused);
         }
 
@@ -43,13 +42,13 @@ namespace CollegeBreaker
                 TimerFPS.Stop();
                 LabelPaused.Text = "Failed";
                 PanelPaused.Visible = true;
-                game.RetryLevel();
 
                 foreach (Form form in Application.OpenForms)
                 {
                     if (form.GetType() == typeof(MainForm))
                     {
                         (form as MainForm).DisablePauseButton();
+                        (form as MainForm).toolsForm.TimerCount.Stop();
                     }
                 }
             }
@@ -57,7 +56,7 @@ namespace CollegeBreaker
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-            ControlHandler.ControlAlign(PanelPaused, 28, "Center", Height / 2 - 14);
+            ControlHandler.ControlAlign(PanelPaused, 28, Height / 2 - 14);
             Location = new Point(Screen.FromControl(this).Bounds.Width / 2 - Width / 2 - ToolsForm.width / 2 - 10, Screen.FromControl(this).Bounds.Height / 2 - Height / 2 + ScoreForm.height / 2 + 10);
         }
 
@@ -69,7 +68,9 @@ namespace CollegeBreaker
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Left && e.KeyCode != Keys.Right)
+            {
                 e.Handled = true;
+            }
 
             if (e.KeyCode == Keys.Left)
             {
@@ -84,7 +85,9 @@ namespace CollegeBreaker
             }
 
             if (move)
+            {
                 TimerPlayerMove.Start();
+            }
         }
 
         private void GameForm_KeyUp(object sender, KeyEventArgs e)
@@ -101,14 +104,11 @@ namespace CollegeBreaker
 
         public void Movement()
         {
-            if (move)
-            {
-                if (left)
-                    game.movables.platform.MovePlatformLeft();
+            if (left && move)
+                game.movables.platform.MovePlatformLeft();
 
-                else
-                    game.movables.platform.MovePlatformRight();
-            }
+            else if (!left && move)
+                game.movables.platform.MovePlatformRight();
         }
     }
 }

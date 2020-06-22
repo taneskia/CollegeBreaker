@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace CollegeBreaker
 {
@@ -47,29 +42,41 @@ namespace CollegeBreaker
                 #region DetectPlatformPosition
 
                 if (ballCenter >= platform.PlatformPosition.X && ballCenter <= platform.PlatformPosition.X + platform.PlatformImage.Width / 4)
+                {
                     ball.BallSpeedX = -ball.Speed;
-
+                }
                 else if (ballCenter >= platform.PlatformPosition.X + platform.PlatformImage.Width / 4 && ballCenter <= platform.PlatformPosition.X + 3 * platform.PlatformImage.Width / 4)
                 {
                     if (ballCenter > platform.PlatformPosition.X + platform.PlatformImage.Width / 2 + 10)
+                    {
                         ball.BallSpeedX = ball.Speed / 2;
-
+                    }
                     else if (ballCenter < platform.PlatformPosition.X + platform.PlatformImage.Width / 2 - 10)
+                    {
                         ball.BallSpeedX = -(ball.Speed / 2);
-
-                    else ball.BallSpeedX = 0;
+                    }
+                    else
+                    {
+                        ball.BallSpeedX = 0;
+                    }
                 }
 
                 else if (ballCenter >= platform.PlatformPosition.X + 3 * platform.PlatformImage.Width / 4 && x <= platform.PlatformPosition.X + platform.PlatformImage.Width)
+                {
                     ball.BallSpeedX = ball.Speed;
+                }
 
                 #endregion DetectPlatformPosition
 
                 if (!hitXBorder)
+                {
                     ball.BallPosition.X = ball.BallPosition.X + ball.BallSpeedX;
+                }
 
                 if (!hitYBorder)
+                {
                     ball.BallPosition.Y = ball.BallPosition.Y + ball.BallSpeedY;
+                }
             }
         }
 

@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CollegeBreaker
 {
@@ -12,19 +9,32 @@ namespace CollegeBreaker
     {
         public int CurrentLevelNumber { get; set; }
         public int[] PointsFromLevels { get; set; }
-        public Image[][] Bricks;
-        private Random random;
         public int BrickCount { get; set; }
+
+        public int LevelTime { get { return 90 - ((CurrentLevelNumber - 1) * 10); } }
+
+        public Image[][] Bricks;
+        private readonly Random random;
+
+        private ScoreForm scoreForm;
 
         public Levels()
         {
             CurrentLevelNumber = 0;
             PointsFromLevels = new int[8];
+            BrickCount = 20;
+
             Bricks = new Image[5][];
+
             for (int i = 0; i < Bricks.Length; i++)
                 Bricks[i] = new Image[4];
+
             random = new Random();
-            BrickCount = 20;
+        }
+
+        public void SetScoreForm(ScoreForm s)
+        {
+            scoreForm = s;
         }
 
         public void NextLevel()
@@ -80,12 +90,17 @@ namespace CollegeBreaker
         {
             int brickCount = 0;
             for (int i = 0; i < Bricks.Length; i++)
+            {
                 for (int j = 0; j < 4; j++)
+                {
                     if (Bricks[i][j] != null)
                     {
                         brickCount++;
                         graphics.DrawImageUnscaled(Bricks[i][j], 50 + 106 * i, 45 + 51 * j);
                     }
+                }
+            }
+
             BrickCount = brickCount;
         }
 
@@ -100,6 +115,7 @@ namespace CollegeBreaker
                     {
                         if (DoOverlap(new Point(50 + 106 * i, 45 + 51 * j), ball, once))
                         {
+                            scoreForm.AddPoints(Convert.ToInt32(Bricks[i][j].Tag));
                             PointsFromLevels[CurrentLevelNumber] = Convert.ToInt32(Bricks[i][j].Tag);
                             Bricks[i][j] = null;
                             once = false;
@@ -125,10 +141,25 @@ namespace CollegeBreaker
                     {
                         if (once)
                         {
-                            if (i == 0) ball.MoveBall(Ball.BrickCollision.Right);
-                            if (i == 6 || i == 5 || i == 7) ball.MoveBall(Ball.BrickCollision.Top);
-                            if (i == 4) ball.MoveBall(Ball.BrickCollision.Left);
-                            if (i == 2 || i == 3 || i == 1) ball.MoveBall(Ball.BrickCollision.Bottom);
+                            if (i == 0)
+                            {
+                                ball.MoveBall(Ball.BrickCollision.Right);
+                            }
+
+                            if (i == 6 || i == 5 || i == 7)
+                            {
+                                ball.MoveBall(Ball.BrickCollision.Top);
+                            }
+
+                            if (i == 4)
+                            {
+                                ball.MoveBall(Ball.BrickCollision.Left);
+                            }
+
+                            if (i == 2 || i == 3 || i == 1)
+                            {
+                                ball.MoveBall(Ball.BrickCollision.Bottom);
+                            }
                         }
 
                         return true;

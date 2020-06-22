@@ -59,7 +59,7 @@
             this.LabelPaused.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.LabelPaused.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LabelPaused.ForeColor = System.Drawing.Color.Gold;
-            this.LabelPaused.Location = new System.Drawing.Point(228, 250);
+            this.LabelPaused.Location = new System.Drawing.Point(217, 250);
             this.LabelPaused.Name = "LabelPaused";
             this.LabelPaused.Size = new System.Drawing.Size(169, 51);
             this.LabelPaused.TabIndex = 0;
@@ -94,8 +94,7 @@
             this.PanelPaused.ResumeLayout(false);
             this.PanelPaused.PerformLayout();
             this.ResumeLayout(false);
-
-        }
+}
 
         #endregion
 

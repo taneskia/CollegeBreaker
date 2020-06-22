@@ -1,5 +1,4 @@
-﻿using CollegeBreaker.Properties;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace CollegeBreaker
 {
@@ -11,7 +10,7 @@ namespace CollegeBreaker
 
         public Platform()
         {
-            PlatformImage = Resources.Platform;
+            PlatformImage = Properties.Resources.Platform;
             PlatformPosition = new Point(314 - PlatformImage.Width / 2, 520);
             PlatformSpeed = 5;
         }
@@ -24,14 +23,17 @@ namespace CollegeBreaker
         public void MovePlatformLeft()
         {
             if (PlatformPosition.X - 5 >= PlatformSpeed)
+            {
                 PlatformPosition.X -= PlatformSpeed;
+            }
         }
 
         public void MovePlatformRight()
         {
             if (PlatformPosition.X <= 623 - PlatformSpeed - PlatformImage.Width - 5)
+            {
                 PlatformPosition.X += PlatformSpeed;
+            }
         }
-
     }
 }
