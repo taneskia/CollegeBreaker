@@ -2,34 +2,46 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace CollegeBreaker
 {
     public class Levels : IObservable<List<List<int>>>
     {
-        private List<IObserver<List<List<int>>>> observers;
+        private readonly List<IObserver<List<List<int>>>> observers;
         public int CurrentLevelNumber { get; set; }
         public List<List<int>> PointsFromLevels { get; set; }
         public int BrickCount { get; set; }
-
-        public int LevelTime { get { return 90 - ((CurrentLevelNumber - 1) * 10); } }
-
         public Image[][] Bricks;
         private readonly Random random;
+        public Timer LevelTimer { get; set; }
+        public int LevelTime { get; set; }
 
         public Levels()
         {
             observers = new List<IObserver<List<List<int>>>>();
             CurrentLevelNumber = 0;
             PointsFromLevels = new List<List<int>>();
-            BrickCount = 6;
+            BrickCount = 2;
 
-            Bricks = new Image[3][];
+            Bricks = new Image[2][];
 
             for (int i = 0; i < Bricks.Length; i++)
-                Bricks[i] = new Image[2];
+                Bricks[i] = new Image[1];
 
             random = new Random();
+
+            LevelTimer = new Timer
+            {
+                Interval = 1000
+            };
+
+            LevelTimer.Tick += new EventHandler(TimerTick);
+        }
+
+        private int GetLevelTime()
+        {
+            return 90 - ((CurrentLevelNumber - 1) * 10);
         }
 
         public float GetMeanGrade()
@@ -55,6 +67,20 @@ namespace CollegeBreaker
         {
             PointsFromLevels.Add(new List<int>());
             GenerateLevel(++CurrentLevelNumber);
+
+            BrickCount = 2;
+
+            LevelTime = GetLevelTime();
+
+            LevelTimer.Stop();
+            LevelTimer.Start();
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            LevelTime--;
+            foreach (IObserver<List<List<int>>> o in observers)
+                o.OnNext(PointsFromLevels);
         }
 
         public void RetryLevel()
@@ -67,35 +93,41 @@ namespace CollegeBreaker
         {
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 1; j++)
                 {
-                    int randomBrick = random.Next(5, 11);
-                    switch (randomBrick)
+                    int failBrickProbability = random.Next(0, 10);
+                    int randomBrick = random.Next(6, 11);
+
+                    if (failBrickProbability == 0)
                     {
-                        case 5:
-                            Bricks[i][j] = Resources.FailBrick;
-                            Bricks[i][j].Tag = -5;
-                            break;
-                        case 6:
-                            Bricks[i][j] = Resources._6_Brick;
-                            Bricks[i][j].Tag = 6;
-                            break;
-                        case 7:
-                            Bricks[i][j] = Resources._7_Brick;
-                            Bricks[i][j].Tag = 7;
-                            break;
-                        case 8:
-                            Bricks[i][j] = Resources._8_Brick;
-                            Bricks[i][j].Tag = 8;
-                            break;
-                        case 9:
-                            Bricks[i][j] = Resources._9_Brick;
-                            Bricks[i][j].Tag = 9;
-                            break;
-                        case 10:
-                            Bricks[i][j] = Resources._10_Brick;
-                            Bricks[i][j].Tag = 10;
-                            break;
+                        Bricks[i][j] = Resources.FailBrick;
+                        Bricks[i][j].Tag = -5;
+                    }
+                    else
+                    {
+                        switch (randomBrick)
+                        {
+                            case 6:
+                                Bricks[i][j] = Resources._6_Brick;
+                                Bricks[i][j].Tag = 6;
+                                break;
+                            case 7:
+                                Bricks[i][j] = Resources._7_Brick;
+                                Bricks[i][j].Tag = 7;
+                                break;
+                            case 8:
+                                Bricks[i][j] = Resources._8_Brick;
+                                Bricks[i][j].Tag = 8;
+                                break;
+                            case 9:
+                                Bricks[i][j] = Resources._9_Brick;
+                                Bricks[i][j].Tag = 9;
+                                break;
+                            case 10:
+                                Bricks[i][j] = Resources._10_Brick;
+                                Bricks[i][j].Tag = 10;
+                                break;
+                        }
                     }
                 }
             }
@@ -106,7 +138,7 @@ namespace CollegeBreaker
             int brickCount = 0;
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 1; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
@@ -127,7 +159,7 @@ namespace CollegeBreaker
             bool once = true;
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 1; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
@@ -201,8 +233,8 @@ namespace CollegeBreaker
 
         private class Unsubscriber<T> : IDisposable
         {
-            private List<IObserver<List<List<int>>>> _observers;
-            private IObserver<List<List<int>>> _observer;
+            private readonly List<IObserver<List<List<int>>>> _observers;
+            private readonly IObserver<List<List<int>>> _observer;
 
             public Unsubscriber(List<IObserver<List<List<int>>>> observers, IObserver<List<List<int>>> observer)
             {

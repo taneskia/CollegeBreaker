@@ -10,10 +10,6 @@ namespace CollegeBreaker
 
         public static int width;
         private bool pause;
-        private int seconds;
-
-        public GameForm gameForm;
-        public MainForm mainForm;
 
         public ToolsForm()
         {
@@ -44,103 +40,62 @@ namespace CollegeBreaker
             ControlHandler.ControlAlign(ButtonExit, 14, Height - ButtonExit.Height - 14);
             ControlHandler.ControlAlign(LabelTime, 15, 40);
 
-            TimerCount.Start();
-
             Game.GetInstance().Subscribe(this);
-        }
-
-        private void SetGameForm()
-        {
-            foreach (Form form in Application.OpenForms)
-                if(form.GetType() == typeof(MainForm))
-                {
-                    mainForm = form as MainForm;
-                    gameForm = mainForm.gameForm;
-                }
-        }
-
-        private void SetSeconds()
-        {
-            seconds = gameForm.game.levels.LevelTime;
         }
 
         private void ButtonPause_Click(object sender, EventArgs e)
         {
             pause = !pause;
 
-            gameForm.PanelPaused.Visible = pause;
-
-            if (pause)
+            if (ButtonPause.Text == "Next")
             {
-                gameForm.TimerFPS.Stop();
-                TimerCount.Stop();
-                ButtonPause.Text = "Play";
-            }
-
-            else
-            {
-                gameForm.TimerFPS.Start();
-                gameForm.Focus();
-                TimerCount.Start();
+                Game.GetInstance().NextLevel();
                 ButtonPause.Text = "Pause";
-                mainForm.scoreForm.SetSemester(gameForm.game.levels.PointsFromLevels.Count);
             }
-        }
 
-        private void TimerCount_Tick(object sender, EventArgs e)
-        {
-            LabelTime.Text = TimeSpan.FromSeconds(--seconds).ToString("mm\\:ss");
+            else ButtonPause.Text = pause ? "Play" : "Pause";
+
+            Game.GetInstance().Pause(pause);
         }
 
         private void ButtonRetry_Click(object sender, EventArgs e)
         {
             ButtonPause.Enabled = ButtonPause.Visible = true;
-            SetSeconds();
-            LabelTime.Text = TimeSpan.FromSeconds(seconds).ToString("mm\\:ss");
-            gameForm.PanelPaused.Visible = false;
-            gameForm.game.RetryLevel();
-            gameForm.TimerFPS.Start();
-            gameForm.Focus();
-            TimerCount.Start();
-        }
-
-        private void ToolsForm_Load(object sender, EventArgs e)
-        {
-            SetGameForm();
-            SetSeconds();
+            Game.GetInstance().RetryLevel();
+            if (pause)
+            {
+                pause = false;
+                ButtonPause.Text = "Pause";
+            }
         }
 
         public void OnNext(GameInfo info)
         {
             //pause and retry buttons diabled
-            if (info.State == Game.State.GameBeat) 
+            if (info.State == Game.State.GameBeat)
             {
-                ButtonPause.Enabled = false;
-                ButtonRetry.Enabled = false;
+                ButtonPause.Enabled = ButtonRetry.Enabled = false;
             }
 
             // pause button disabled
-            if (info.State == Game.State.GameLost || info.State == Game.State.LevelLost) 
+            if (info.State == Game.State.GameLost || info.State == Game.State.LevelLost)
             {
-                ButtonPause.Enabled = false;
+                ButtonPause.Enabled = ButtonPause.Visible = false;
             }
 
             // all buttons enabled
-            if (info.State == Game.State.Running) 
+            if (info.State == Game.State.Running)
             {
-                ButtonPause.Enabled = true;
-                ButtonRetry.Enabled = true;
+                ButtonPause.Enabled = ButtonRetry.Enabled = true;
+
+                if (!pause)
+                    LabelTime.Text = TimeSpan.FromSeconds(info.LevelTime).ToString("mm\\:ss");
             }
 
             if (info.State == Game.State.LevelBeat)
             {
                 ButtonPause.Text = "Next";
-                ButtonPause.Enabled = true;
-                ButtonRetry.Enabled = true;
-                pause = true;
-                gameForm.game.NextLevel();
-                SetSeconds();
-                LabelTime.Text = TimeSpan.FromSeconds(seconds).ToString("mm\\:ss");
+                ButtonPause.Enabled = ButtonRetry.Enabled = pause = true;
             }
         }
 

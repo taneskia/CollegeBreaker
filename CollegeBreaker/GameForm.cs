@@ -27,6 +27,12 @@ namespace CollegeBreaker
             ControlHandler.VerticalAlign(LabelPaused, Height);
         }
 
+        private void GameForm_Load(object sender, EventArgs e)
+        {
+            ControlHandler.ControlAlign(PanelPaused, 28, Height / 2 - 14);
+            Location = new Point(Screen.FromControl(this).Bounds.Width / 2 - Width / 2 - ToolsForm.width / 2 - 10, Screen.FromControl(this).Bounds.Height / 2 - Height / 2 + ScoreForm.height / 2 + 10);
+        }
+
         private void GameForm_Paint(object sender, PaintEventArgs e)
         {
             game.Advance();
@@ -37,12 +43,6 @@ namespace CollegeBreaker
         private void TimerFPS_Tick(object sender, EventArgs e)
         {
             Invalidate();
-        }
-
-        private void GameForm_Load(object sender, EventArgs e)
-        {
-            ControlHandler.ControlAlign(PanelPaused, 28, Height / 2 - 14);
-            Location = new Point(Screen.FromControl(this).Bounds.Width / 2 - Width / 2 - ToolsForm.width / 2 - 10, Screen.FromControl(this).Bounds.Height / 2 - Height / 2 + ScoreForm.height / 2 + 10);
         }
 
         private void TimerPlayerMove_Tick(object sender, EventArgs e)
@@ -96,59 +96,68 @@ namespace CollegeBreaker
                 game.movables.platform.MovePlatformRight();
         }
 
+        public void SetEndScreen(string text, int fontSize)
+        {
+            using (Graphics g = CreateGraphics())
+            {
+                SizeF size = g.MeasureString(text, ControlHandler.GetFont(fontSize), LabelPaused.Width);
+                LabelPaused.Height = (int)Math.Ceiling(size.Height);
+                LabelPaused.Text = text;
+            }
+
+            ControlHandler.ControlAlign(LabelPaused, fontSize, Height / 2 - LabelPaused.Height / 2);
+        }
+
+        public void PauseGame(bool pause)
+        {
+            SetEndScreen("Paused!", 24);
+
+            if (pause)
+            {
+                TimerFPS.Stop();
+                TimerPlayerMove.Stop();
+                PanelPaused.Visible = true;
+            }
+            else
+            {
+                TimerFPS.Start();
+                TimerPlayerMove.Start();
+                PanelPaused.Visible = false;
+            }
+        }
+
         public void OnNext(GameInfo info)
         {
-            if (info.State == Game.State.GameBeat) 
+            if(info.State == Game.State.Paused)
             {
-                LabelPaused.Text = "Congratulations!\nYou've graduated!";
-                ControlHandler.ControlAlign(LabelPaused, 28, Height / 2 - 14);
+                PauseGame(true);
+            }
+
+            if (info.State == Game.State.GameBeat)
+            {
+                TimerFPS.Stop();
+                SetEndScreen("Congratulations!\nYou've graduated!", 20);
                 PanelPaused.Visible = true;
             }
 
-            if(info.State == Game.State.LevelLost)
+            if (info.State == Game.State.LevelLost)
             {
                 TimerFPS.Stop();
-                LabelPaused.Text = "Failed";
+                SetEndScreen("Failed!", 24);
                 PanelPaused.Visible = true;
-
-                foreach (Form form in Application.OpenForms)
-                {
-                    if (form.GetType() == typeof(MainForm))
-                    {   
-                        (form as MainForm).toolsForm.ButtonPause.Enabled = (form as MainForm).toolsForm.ButtonPause.Visible = false;
-                        (form as MainForm).toolsForm.TimerCount.Stop();
-                    }
-                }
             }
 
             if (info.State == Game.State.LevelBeat)
             {
                 TimerFPS.Stop();
-                LabelPaused.Text = "Semester\nPassed";
-                ControlHandler.ControlAlign(LabelPaused, 28, Height / 2 - 14);
+                SetEndScreen("Semester\nPassed!", 24);
                 PanelPaused.Visible = true;
-
-                foreach (Form form in Application.OpenForms)
-                {
-                    if (form.GetType() == typeof(MainForm))
-                    {
-                        (form as MainForm).toolsForm.TimerCount.Stop();
-                    }
-                }
             }
 
             if (info.State == Game.State.Running)
             {
-                TimerFPS.Start();
-                LabelPaused.Text = "Paused";
-                PanelPaused.Visible = false;
-                foreach (Form form in Application.OpenForms)
-                {
-                    if (form.GetType() == typeof(MainForm))
-                    {
-                        (form as MainForm).toolsForm.ButtonPause.Enabled = (form as MainForm).toolsForm.ButtonPause.Visible = true;
-                    }
-                }
+                Focus();
+                PauseGame(false);
             }
         }
 

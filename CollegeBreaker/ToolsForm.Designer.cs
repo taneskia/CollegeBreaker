@@ -28,13 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.PanelMain = new System.Windows.Forms.Panel();
             this.ButtonRetry = new System.Windows.Forms.Button();
             this.LabelTime = new System.Windows.Forms.Label();
             this.ButtonPause = new System.Windows.Forms.Button();
             this.ButtonExit = new System.Windows.Forms.Button();
-            this.TimerCount = new System.Windows.Forms.Timer(this.components);
             this.PanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,12 +104,6 @@
             this.ButtonExit.Text = "Exit";
             this.ButtonExit.UseVisualStyleBackColor = false;
             // 
-            // TimerCount
-            // 
-            this.TimerCount.Enabled = true;
-            this.TimerCount.Interval = 1000;
-            this.TimerCount.Tick += new System.EventHandler(this.TimerCount_Tick);
-            // 
             // ToolsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -123,7 +115,6 @@
             this.Name = "ToolsForm";
             this.Padding = new System.Windows.Forms.Padding(2);
             this.Text = "`";
-            this.Load += new System.EventHandler(this.ToolsForm_Load);
             this.PanelMain.ResumeLayout(false);
             this.PanelMain.PerformLayout();
             this.ResumeLayout(false);
@@ -137,6 +128,5 @@
         private System.Windows.Forms.Label LabelTime;
         public System.Windows.Forms.Button ButtonPause;
         public System.Windows.Forms.Button ButtonRetry;
-        public System.Windows.Forms.Timer TimerCount;
     }
 }

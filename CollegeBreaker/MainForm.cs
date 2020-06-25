@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Drawing;
+using System.Media;
 using System.Windows.Forms;
 
 namespace CollegeBreaker
 {
-    public partial class MainForm : Form, IObserver<GameInfo>
+    public partial class MainForm : Form
     {
-        public GameForm gameForm = new GameForm();
-        public ScoreForm scoreForm = new ScoreForm();
-        public ToolsForm toolsForm = new ToolsForm();
+        public GameForm gameForm;
+        public ScoreForm scoreForm;
+        public ToolsForm toolsForm;
+        public SoundPlayer Player;
 
         public MainForm()
         {
             InitializeComponent();
+
+            Width = 370;
+            Height = 325;
 
             LabelTitle.Text = "College\nBreaker";
 
@@ -27,24 +32,22 @@ namespace CollegeBreaker
 
             SetControls();
 
-            Game.GetInstance().Subscribe(this);
+            Player = new SoundPlayer(Properties.Resources.Song);
+            //Player.PlayLooping();
         }
 
         private void SetControls()
         {
             ControlHandler.ControlAlign(LabelTitle, 28, 50);
-            ControlHandler.ControlAlign(LabelScoreboard, 13, Height / 2 - 50);
-            ControlHandler.ControlAlign(LabelTop1, 10, Height / 2 - 10);
-            ControlHandler.ControlAlign(LabelTop2, 10, Height / 2 + LabelTop1.Height);
-            ControlHandler.ControlAlign(LabelTop3, 10, Height / 2 + LabelTop1.Height + LabelTop2.Height + 10);
             ControlHandler.ControlAlign(ButtonExit, 14, Height - 40 - ButtonExit.Height);
             ControlHandler.ControlAlign(ButtonPlay, 14, Height - 60 - 2 * ButtonExit.Height);
         }
 
         private void ButtonPlay_Click(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.PlayerName == string.Empty)
-                new PlayerName().ShowDialog();
+            gameForm = new GameForm();
+            scoreForm = new ScoreForm();
+            toolsForm = new ToolsForm();
 
             Hide();
 
@@ -66,21 +69,6 @@ namespace CollegeBreaker
         {
             gameForm.Location = new Point(scoreForm.Location.X, scoreForm.Location.Y + scoreForm.Height + 10);
             toolsForm.Location = new Point(gameForm.Location.X + gameForm.Width + 10, scoreForm.Location.Y);
-        }
-
-        public void OnNext(GameInfo value)
-        {
-            
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
         }
     }
 }

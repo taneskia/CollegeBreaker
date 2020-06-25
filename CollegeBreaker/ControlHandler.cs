@@ -31,9 +31,14 @@ namespace CollegeBreaker
             control.Location = new Point(control.FindForm().Width / 2 - control.Width / 2, verticalPosition);
         }
 
+        public static Font GetFont(int fontSize)
+        {
+            return new Font(pfc.Families[0], fontSize, FontStyle.Regular);
+        }
+
         public static void SetFont(Control control, int fontSize)
         {
-            control.Font = new Font(pfc.Families[0], fontSize, FontStyle.Regular);
+            control.Font = GetFont(fontSize);
         }
     }
 }

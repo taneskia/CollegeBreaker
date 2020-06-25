@@ -7,11 +7,12 @@ namespace CollegeBreaker
     public class Game : IObservable<GameInfo>, IObserver<List<List<int>>>
     {
         private static readonly Game INSTANCE = new Game();
-        private List<IObserver<GameInfo>> observers;
-        public enum State { Running, LevelBeat, LevelLost, GameBeat, GameLost }
+        private readonly List<IObserver<GameInfo>> observers;
+        public enum State { Running, LevelBeat, LevelLost, GameBeat, GameLost, Paused }
         public Movables movables;
         public Levels levels;
         private bool levelLost;
+        private bool paused;
 
         private Game()
         {
@@ -19,11 +20,32 @@ namespace CollegeBreaker
             movables = new Movables(new Ball(), new Platform());
             levels = new Levels();
             levels.Subscribe(this);
+            paused = false;
         }
 
         public static Game GetInstance()
         {
             return INSTANCE;
+        }
+
+        private void Notify()
+        {
+            GameInfo gameInfo = new GameInfo(levels.PointsFromLevels, GetState(), levels.LevelTime);
+            foreach (IObserver<GameInfo> o in observers)
+                o.OnNext(gameInfo);
+        }
+
+        public void Pause(bool pause)
+        {
+            if (pause)
+                levels.LevelTimer.Stop();
+
+            else if (!levels.LevelTimer.Enabled)
+                levels.LevelTimer.Start();
+
+            paused = pause;
+
+            Notify();
         }
 
         public State GetState()
@@ -34,20 +56,18 @@ namespace CollegeBreaker
                 return State.LevelLost;
             }
             */
+
+            if (paused)
+                return State.Paused;
+
             if (levels.BrickCount == 0)
-            {
                 return State.LevelBeat;
-            }
 
             if (levelLost)
-            {
                 return State.LevelLost;
-            }
 
             if (levels.CurrentLevelNumber == 8 && levels.BrickCount == 0)
-            {
-                return State.GameBeat;
-            }
+                return State.GameBeat;            
 
             return State.Running;
         }
@@ -63,8 +83,7 @@ namespace CollegeBreaker
             levelLost = !movables.MoveBall();
 
             if (levelLost)
-                foreach (IObserver<GameInfo> o in observers)
-                    o.OnNext(new GameInfo(levels.PointsFromLevels, GetState()));
+                Notify();
 
             levels.CheckCollisionWithBall(movables.ball);
         }
@@ -79,6 +98,8 @@ namespace CollegeBreaker
 
             movables.Reset();
             levels.NextLevel();
+
+            Notify();
         }
 
         public void RetryLevel()
@@ -86,8 +107,9 @@ namespace CollegeBreaker
             movables.ball.Reset();
             levels.RetryLevel();
 
+            GameInfo gameInfo = new GameInfo(levels.PointsFromLevels, State.Running, levels.LevelTime);
             foreach (IObserver<GameInfo> o in observers)
-                o.OnNext(new GameInfo(levels.PointsFromLevels, State.Running));
+                o.OnNext(gameInfo);
         }
 
         public IDisposable Subscribe(IObserver<GameInfo> observer)
@@ -96,15 +118,14 @@ namespace CollegeBreaker
             {
                 observers.Add(observer);
                 // Provide observer with existing data.
-                GameInfo gameInfo = new GameInfo(levels.PointsFromLevels, GetState());
-                observer.OnNext(gameInfo);
+                observer.OnNext(new GameInfo(levels.PointsFromLevels, GetState(), levels.LevelTime));
             }
             return new Unsubscriber<GameInfo>(observers, observer);
         }
 
         public void OnNext(List<List<int>> value)
         {
-            GameInfo gameInfo = new GameInfo(value, GetState());
+            GameInfo gameInfo = new GameInfo(value, GetState(), levels.LevelTime);
             foreach (IObserver<GameInfo> o in observers)
                 o.OnNext(gameInfo);
         }
@@ -121,13 +142,13 @@ namespace CollegeBreaker
 
         internal class Unsubscriber<GameInfo> : IDisposable
         {
-            private List<IObserver<GameInfo>> _observers;
-            private IObserver<GameInfo> _observer;
+            private readonly List<IObserver<GameInfo>> _observers;
+            private readonly IObserver<GameInfo> _observer;
 
             internal Unsubscriber(List<IObserver<GameInfo>> observers, IObserver<GameInfo> observer)
             {
-                this._observers = observers;
-                this._observer = observer;
+                _observers = observers;
+                _observer = observer;
             }
 
             public void Dispose()

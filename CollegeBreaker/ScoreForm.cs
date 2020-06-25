@@ -46,7 +46,7 @@ namespace CollegeBreaker
             }
 
             if (count != 0)
-                LabelMeanGrade.Text = "Mean Grade: " + String.Format("{0:0.00}", sum / count);
+                LabelMeanGrade.Text = "Mean Grade: " + string.Format("{0:0.00}", sum / count);
             else LabelMeanGrade.Text = "Mean Grade: NaN";
         }
 
@@ -57,7 +57,7 @@ namespace CollegeBreaker
 
         public void OnNext(GameInfo info)
         {
-            LabelMeanGrade.Text = "Mean Grade: " + String.Format("{0:0.00}", 0);
+            LabelMeanGrade.Text = "Mean Grade: " + string.Format("{0:0.00}", 0);
             ShowMeanGrade(info.PointsFromLevels);
             SetSemester(info.PointsFromLevels.Count);
         }

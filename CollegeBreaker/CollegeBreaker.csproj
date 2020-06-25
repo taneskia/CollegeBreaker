@@ -197,5 +197,8 @@
   <ItemGroup>
     <None Include="Resources\Retry_Clean.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Song.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
