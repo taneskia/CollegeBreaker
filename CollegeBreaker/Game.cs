@@ -50,21 +50,14 @@ namespace CollegeBreaker
 
         public State GetState()
         {
-            /*
-            if (levels.GetMeanGrade() < 5 && levels.PointsFromLevels.Count != 0)
-            {
+            if ((levels.GetMeanGrade() < 5 && levels.PointsFromLevels.Count != 0) || levelLost)
                 return State.LevelLost;
-            }
-            */
 
             if (paused)
                 return State.Paused;
 
-            if (levels.BrickCount == 0)
+            if (levels.BrickCount == 0 || levels.LevelTime <= 0)
                 return State.LevelBeat;
-
-            if (levelLost)
-                return State.LevelLost;
 
             if (levels.CurrentLevelNumber == 8 && levels.BrickCount == 0)
                 return State.GameBeat;            
@@ -104,7 +97,7 @@ namespace CollegeBreaker
 
         public void RetryLevel()
         {
-            movables.ball.Reset();
+            movables.Reset();
             levels.RetryLevel();
 
             GameInfo gameInfo = new GameInfo(levels.PointsFromLevels, State.Running, levels.LevelTime);
