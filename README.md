@@ -118,39 +118,39 @@ public IDisposable Subscribe(IObserver<GameInfo> observer)
 **OnNext** методот е дефиниран од **IObserver** шаблонот.
 ```csharp
 public void OnNext(GameInfo info)
-        {
-            if(info.State == Game.State.Paused)
-            {
-                PauseGame(true);
-            }
+{
+	if(info.State == Game.State.Paused)
+	{
+		PauseGame(true);
+	}
 
-            if (info.State == Game.State.GameBeat)
-            {
-                TimerFPS.Stop();
-                SetEndScreen("Congratulations!\nYou've graduated!", 20);
-                PanelPaused.Visible = true;
-            }
+	if (info.State == Game.State.GameBeat)
+	{
+		TimerFPS.Stop();
+		SetEndScreen("Congratulations!\nYou've graduated!", 20);
+		PanelPaused.Visible = true;
+	}
 
-            if (info.State == Game.State.LevelLost)
-            {
-                TimerFPS.Stop();
-                SetEndScreen("Failed!", 24);
-                PanelPaused.Visible = true;
-            }
+	if (info.State == Game.State.LevelLost)
+	{
+		TimerFPS.Stop();
+		SetEndScreen("Failed!", 24);
+		PanelPaused.Visible = true;
+	}
 
-            if (info.State == Game.State.LevelBeat)
-            {
-                TimerFPS.Stop();
-                SetEndScreen("Semester\nPassed!", 24);
-                PanelPaused.Visible = true;
-            }
+	if (info.State == Game.State.LevelBeat)
+	{
+		TimerFPS.Stop();
+		SetEndScreen("Semester\nPassed!", 24);
+		PanelPaused.Visible = true;
+	}
 
-            if (info.State == Game.State.Running)
-            {
-                Focus();
-                PauseGame(false);
-            }
-        }
+	if (info.State == Game.State.Running)
+	{
+		Focus();
+		PauseGame(false);
+	}
+}
 ```
 Кодот горе претставува имплементација на **OnNext** методот во класата `GameForm`. Оваа класа е кодот за формата во која се одвива исцрувањето на сите елементи на играта кои се наоѓаат во `Game` класата. Методот **OnNext** се повикува од моделот од `Game` класата кога има промена во состојбата, за потоа гледајќи ги податоците испратени во `GameInfo` објектот, `GameForm` да ги превземе соодветните акции во **OnNext** методот.
 
@@ -223,19 +223,23 @@ public void Pause(bool pause)
 ```csharp
 public State GetState()
 {
-    if ((levels.GetMeanGrade() < 6 && levels.PointsFromLevels.Count != 0) || levelLost)
-        return State.LevelLost;
+	if (paused)
+		return State.Paused;
 
-    if (paused)
-        return State.Paused;
+	if ((levels.GetMeanGrade() < 6 && levels.PointsFromLevels.Count != 0 
+		&& levels.PointsFromLevels[0].Count != 0) || levelLost)
+	{
+		levels.LevelTimer.Stop();
+		return State.LevelLost;
+	}
 
-    if (levels.BrickCount == 0 || levels.LevelTime <= 0)
-        return State.LevelBeat;
+	if (levels.CurrentLevelNumber == 8 && (levels.BrickCount == 0 || levels.LevelTime < 0))
+		return State.GameBeat;
 
-    if (levels.CurrentLevelNumber == 8 && (levels.BrickCount == 0 || levels.LevelTime <= 0))
-        return State.GameBeat;            
+	if (levels.BrickCount == 0 || levels.LevelTime < 0)
+		return State.LevelBeat;
 
-    return State.Running;
+	return State.Running;
 }
 ```
 

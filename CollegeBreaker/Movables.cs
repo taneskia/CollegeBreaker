@@ -90,5 +90,11 @@ namespace CollegeBreaker
             platform.Reset();
             ball.Reset();
         }
+
+        public void IncreaseSpeed()
+        {
+            ball.Speed += 1;
+            platform.PlatformSpeed += 1;
+        }
     }
 }

@@ -6,12 +6,25 @@ namespace CollegeBreaker
 {
     public class Game : IObservable<GameInfo>, IObserver<List<List<int>>>
     {
+        // Instanca od klasata
         private static readonly Game INSTANCE = new Game();
+
+        // Lista od Observers koi ja nabljuduvaat ovaa klasa za nekakvi promeni
         private readonly List<IObserver<GameInfo>> observers;
+
+        // Momentalniot status na igrata
         public enum State { Running, LevelBeat, LevelLost, GameBeat, GameLost, Paused }
+
+        // Objekt od klasata movables
         public Movables movables;
+
+        // Objekt od klasata Levels
         public Levels levels;
+
+        // Boolean promenliva koja pokazhuva dali nivoto e uspeshno zavrsheno ili ne
         private bool levelLost;
+
+        // Boolean promenliva koja pokazhuva dali igrata e pauzirana ili ne
         private bool paused;
 
         private Game()
@@ -50,17 +63,21 @@ namespace CollegeBreaker
 
         public State GetState()
         {
-            if ((levels.GetMeanGrade() < 5 && levels.PointsFromLevels.Count != 0) || levelLost)
-                return State.LevelLost;
-
             if (paused)
                 return State.Paused;
 
-            if (levels.BrickCount == 0 || levels.LevelTime <= 0)
-                return State.LevelBeat;
+            if ((levels.GetMeanGrade() < 6 && levels.PointsFromLevels.Count != 0 
+                && levels.PointsFromLevels[0].Count != 0) || levelLost)
+            {
+                levels.LevelTimer.Stop();
+                return State.LevelLost;
+            }
 
-            if (levels.CurrentLevelNumber == 8 && levels.BrickCount == 0)
-                return State.GameBeat;            
+            if (levels.CurrentLevelNumber == 8 && (levels.BrickCount == 0 || levels.LevelTime < 0))
+                return State.GameBeat;
+
+            if (levels.BrickCount == 0 || levels.LevelTime < 0)
+                return State.LevelBeat;
 
             return State.Running;
         }
@@ -84,10 +101,7 @@ namespace CollegeBreaker
         public void NextLevel()
         {
             if (levels.CurrentLevelNumber % 2 == 0)
-            {
-                movables.ball.Speed += 1;
-                movables.platform.PlatformSpeed += 1;
-            }
+                movables.IncreaseSpeed();
 
             movables.Reset();
             levels.NextLevel();

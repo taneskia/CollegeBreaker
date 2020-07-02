@@ -10,7 +10,6 @@ namespace CollegeBreaker
         public GameForm gameForm;
         public ScoreForm scoreForm;
         public ToolsForm toolsForm;
-        public SoundPlayer Player;
 
         public MainForm()
         {
@@ -31,9 +30,6 @@ namespace CollegeBreaker
             ButtonPlay.MouseLeave += new EventHandler(ImageHandler.MouseLeave);
 
             SetControls();
-
-            Player = new SoundPlayer(Properties.Resources.Song);
-            //Player.PlayLooping();
         }
 
         private void SetControls()

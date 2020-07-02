@@ -22,12 +22,12 @@ namespace CollegeBreaker
             observers = new List<IObserver<List<List<int>>>>();
             CurrentLevelNumber = 0;
             PointsFromLevels = new List<List<int>>();
-            BrickCount = 2;
+            BrickCount = 20;
 
-            Bricks = new Image[2][];
+            Bricks = new Image[5][];
 
             for (int i = 0; i < Bricks.Length; i++)
-                Bricks[i] = new Image[1];
+                Bricks[i] = new Image[4];
 
             random = new Random();
 
@@ -63,17 +63,21 @@ namespace CollegeBreaker
             return 0;
         }
 
+        private void SetLevelTime()
+        {
+            LevelTime = GetLevelTime();
+            LevelTimer.Stop();
+            LevelTimer.Start();
+        }
+
         public void NextLevel()
         {
             PointsFromLevels.Add(new List<int>());
             GenerateLevel(++CurrentLevelNumber);
 
-            BrickCount = 2;
+            BrickCount = 20;
 
-            LevelTime = GetLevelTime();
-
-            LevelTimer.Stop();
-            LevelTimer.Start();
+            SetLevelTime();
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -87,13 +91,14 @@ namespace CollegeBreaker
         {
             PointsFromLevels[CurrentLevelNumber - 1] = new List<int>();
             GenerateLevel(CurrentLevelNumber);
+            SetLevelTime();
         }
 
         private void GenerateLevel(int level)
         {
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     int failBrickProbability = random.Next(0, 10);
                     int randomBrick = random.Next(6, 11);
@@ -101,7 +106,7 @@ namespace CollegeBreaker
                     if (failBrickProbability == 0)
                     {
                         Bricks[i][j] = Resources.FailBrick;
-                        Bricks[i][j].Tag = -5;
+                        Bricks[i][j].Tag = -2;
                     }
                     else
                     {
@@ -138,7 +143,7 @@ namespace CollegeBreaker
             int brickCount = 0;
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
@@ -159,7 +164,7 @@ namespace CollegeBreaker
             bool once = true;
             for (int i = 0; i < Bricks.Length; i++)
             {
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     if (Bricks[i][j] != null)
                     {
