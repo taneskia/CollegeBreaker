@@ -279,3 +279,5 @@ public State GetState()
 <img src="./Screenshots/Screenshot_5.png" height="300"/>
 
 Кога на крајот ќе го поминеме и последното, осмото ниво, играта звршува. Се појавуа екранот на кој е испишано дека играта е победена.
+
+<img src="./Screenshots/Screenshot_6.png" height="300"/>
